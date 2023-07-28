@@ -1,0 +1,223 @@
+<div class="container mt-3">
+  <div class="titulo my-5">
+    <h2 class="text-center">Products</h2>
+    <div class="newproduct">
+      <button
+        data-bs-toggle="modal"
+        data-bs-target="#staticBackdrop"
+        (click)="modal('New Product')"
+      >
+        <i class="fa-solid fa-plus me-2"></i>New Product
+      </button>
+    </div>
+  </div>
+  <div class="content">
+    <div class="table-responsive-sm">
+      <table class="table table-hover">
+        <thead>
+          <td>No.</td>
+          <td>UPC</td>
+          <td>ProdName</td>
+          <td>Mfgr</td>
+          <td>Model</td>
+          <td>UnitListPrice</td>
+          <td>UnitsinStock</td>
+          <td></td>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of product; let i = index">
+            <td>{{i+1}}</td>
+            <td>{{item.upc}}</td>
+            <td>{{item.name}}</td>
+            <td>{{item.mfgr}}</td>
+            <td>{{item.model}}</td>
+            <td>{{ item.price | currency }}</td>
+            <td>{{item.stock}}</td>
+            <td>
+              <i
+                class="fa-regular fa-pen-to-square text-success"
+                data-bs-toggle="modal"
+                data-bs-target="#staticBackdrop"
+                (click)="modal('Edit Product',item)"
+                title="Edit"
+              ></i>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="staticBackdrop"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">{{ titulo }}</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          #closebutton
+        ></button>
+      </div>
+      <form [formGroup]="form" (ngSubmit)="guardar()">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-12 col-md-4 my-3">
+              <label for="UPC" class="form-label">UPC</label>
+              <input
+                type="text"
+                class="form-control"
+                id="UPC"
+                placeholder="UPC"
+                formControlName="upc"
+              />
+              <span
+                class="text-danger"
+                *ngIf=" form.controls['upc'].invalid &&
+              (form.controls['upc'].dirty || form.controls['upc'].touched)
+              &&form.get('upc')?.errors?.['required']"
+              >
+                Este campo es requerido *
+              </span>
+            </div>
+            <div class="col-12 col-md-4 my-3">
+              <label for="ProdName" class="form-label">ProdName</label>
+              <input
+                type="text"
+                class="form-control"
+                id="ProdName"
+                placeholder="ProdName"
+                formControlName="name"
+              />
+              <span
+                class="text-danger"
+                *ngIf="
+              form.controls['name'].invalid &&
+              (form.controls['name'].dirty || form.controls['upc'].touched) &&
+              form.get('name')?.errors?.['required']"
+              >
+                Este campo es requerido *
+              </span>
+            </div>
+            <div class="col-12 col-md-4 my-3">
+              <label for="Mfgr" class="form-label">Mfgr</label>
+              <input
+                type="text"
+                class="form-control"
+                id="Mfgr"
+                placeholder="Mfgr"
+                formControlName="mfgr"
+              />
+              <span
+                class="text-danger"
+                *ngIf="form.controls['mfgr'].invalid &&
+              (form.controls['mfgr'].dirty || form.controls['upc'].touched) &&
+              form.get('mfgr')?.errors?.['required']"
+              >
+                Este campo es requerido *
+              </span>
+            </div>
+            <div class="col-12 col-md-4 my-3">
+              <label for="Model" class="form-label">Model</label>
+              <input
+                type="text"
+                class="form-control"
+                id="Model"
+                placeholder="Model"
+                formControlName="model"
+              />
+              <span
+                class="text-danger"
+                *ngIf="form.controls['model'].invalid &&
+              (form.controls['model'].dirty || form.controls['upc'].touched) &&
+              form.get('model')?.errors?.['required']"
+              >
+                Este campo es requerido *
+              </span>
+            </div>
+            <div class="col-12 col-md-4 my-3">
+              <label for="UnitListPrice" class="form-label"
+                >UnitListPrice</label
+              >
+              <input
+                type="number"
+                class="form-control"
+                id="UnitListPrice"
+                placeholder="$120"
+                formControlName="price"
+              />
+              <span
+                class="text-danger"
+                *ngIf="form.controls['price'].invalid &&
+              (form.controls['price'].dirty || form.controls['price'].touched) &&
+              form.get('price')?.errors?.['required']"
+              >
+                Este campo es requerido *
+              </span>
+              <span
+                class="text-danger"
+                *ngIf="form.controls['price'].invalid &&
+              (form.controls['price'].dirty || form.controls['price'].touched) &&
+              form.get('price')?.errors?.['pattern']"
+              >
+                Este campo solo admite numeros *
+              </span>
+            </div>
+            <div class="col-12 col-md-4 my-3">
+              <label for="UnitsinStock" class="form-label">UnitsinStock</label>
+              <input
+                type="number"
+                class="form-control"
+                id="UnitsinStock"
+                placeholder="10"
+                formControlName="stock"
+              />
+              <span
+                class="text-danger"
+                *ngIf="form.controls['stock'].invalid &&
+              (form.controls['stock'].dirty || form.controls['stock'].touched) &&
+              form.get('stock')?.errors?.['required']"
+              >
+                Este campo es requerido *
+              </span>
+              <span
+                class="text-danger"
+                *ngIf="form.controls['stock'].invalid &&
+              (form.controls['stock'].dirty || form.controls['stock'].touched) &&
+              form.get('stock')?.errors?.['pattern']"
+              >
+                Este campo solo admite numero *
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <input
+            type="submit"
+            *ngIf="titulo === 'New Product'"
+            class="btn btn-primary"
+            value="Save Product"
+          />
+          <input
+            type="submit"
+            *ngIf="titulo === 'Edit Product'"
+            class="btn btn-warning"
+            value="Update Product"
+          />
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

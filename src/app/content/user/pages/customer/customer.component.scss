@@ -1,0 +1,31 @@
+i{
+  cursor: pointer;
+}
+.newproduct button{
+  background: white;
+  color:#1A3C74 ;
+  padding: 8px;
+  border: solid 2px #1A3C74;
+  border-radius: 10px;
+  width: 15rem;
+}
+.newproduct button:hover{
+  background: #1A3C74;
+  color:white ;
+  padding-left: 5px;
+
+}
+.content table thead{
+  background: #1A3C74;
+  color: white;
+  td{
+    padding: 10px;
+    text-align: center;
+  }
+}
+.content table tbody{
+  text-align: center;
+}
+.modal .modal-body label{
+  font-weight: bold;
+}

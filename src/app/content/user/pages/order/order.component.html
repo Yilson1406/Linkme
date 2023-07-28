@@ -1,0 +1,249 @@
+<div class="container mt-3">
+  <div class="titulo my-5">
+    <h2 class="text-center">Orders</h2>
+    <div class="newproduct">
+      <button
+        data-bs-toggle="modal"
+        data-bs-target="#staticBackdrop"
+        (click)="modal('New Order')"
+      >
+        <i class="fa-solid fa-plus me-2"></i>New Order
+      </button>
+    </div>
+  </div>
+  <div class="content">
+    <div class="table-responsive-sm">
+      <table class="table table-hover">
+        <thead>
+          <td>No.</td>
+          <td>Order Date</td>
+          <td>Sold By</td>
+          <td>Total</td>
+          <td></td>
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let item of Orders; let i = index">
+            <td>{{i +1}}</td>
+            <td>{{item.date | date:"dd MMMM, yyyy"}}</td>
+            <td>{{item.soldBy}}</td>
+            <td>{{item.total| currency }}</td>
+            <td>
+              <i
+                class="fa-regular fa-pen-to-square text-success"
+                data-bs-toggle="modal"
+                data-bs-target="#staticBackdrop"
+                title="Edit"
+                (click)="modal('Edit Order', item)"
+              ></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="staticBackdrop"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">{{ titulo }}</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          #closebutton
+        ></button>
+      </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-12 col-md-6 my-3">
+              <div class="row">
+                <div class="col-12">
+                  <label for="firstname" class="form-label">Customer</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="firstname"
+                    placeholder="First Name"
+                    (input)="filterCustomer($event)"
+                  />
+                  <span
+                    class="text-danger"
+                    *ngIf=" form.controls['firstname'].invalid &&
+                  (form.controls['firstname'].dirty || form.controls['firstname'].touched)
+                  &&form.get('firstname')?.errors?.['required']"
+                  >
+                    Este campo es requerido *
+                  </span>
+                </div>
+                <div class="col-12">
+                  <div class="resultado" *ngIf="resultado_busquedaCustomer">
+                    <div class="contenido_resultado">
+                      <div
+                        class="productos_buscados_noencontrado"
+                        *ngIf="CustomerFilter.length === 0"
+                      >
+                        <p style="text-align: center; padding: 20px">
+                          Customer not Found.
+                        </p>
+                      </div>
+                      <div
+                        class="customershared"
+                        *ngFor="let item of CustomerFilter"
+                        (click)="SelectCustomer(item)"
+                        style="cursor: pointer;"
+                      >
+                        <div class="row">
+
+                          <div class="col-12 pl-3" >
+                            <p >
+                              {{ item.firstname }} {{item.lastname}}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="col-12 col-md-6" *ngIf="CustomerSelect">
+              <p >
+                <b> Name: </b>{{ CustomerSelect.firstname | titlecase}} {{CustomerSelect.lastname | titlecase}}
+              </p>
+              <p >
+                <b> Street: </b>{{ CustomerSelect.street | titlecase }}
+              </p>
+            </div>
+
+
+            <hr>
+            <div class="row">
+              <h2 class="text-center">Add Products</h2>
+            </div>
+            <div class="row">
+              <div class="col-12 col-md-4">
+                <label for="firstname" class="form-label">Select Product</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="firstname"
+                  placeholder="Product Name"
+                  (input)="filtrarproductos($event)"
+
+                />
+
+              </div>
+              <div class="col-12 col-md-8">
+                <div class="row">
+                  <div class="col-4">
+                    <label for="">Unit Price</label>
+                    <p *ngIf="productselectfilter">{{productselectfilter.price | currency}}</p>
+
+                  </div>
+                  <div class="col-3">
+                    <label for="firstname" class="form-label">Amount</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="firstname"
+                      placeholder="Product Name"
+                      [(ngModel)]="cantidad"
+                    />
+                  </div>
+                  <div class="col-4">
+                    <label for="">Unit Price</label>
+                    <p *ngIf="productselectfilter">{{cantidad * productselectfilter.price  | currency}}</p>
+                  </div>
+                  <div class="col-1">
+                    <i class="fa-regular fa-square-plus fa-2x text-success mt-4" style="cursor: pointer;" (click)="addproduct()"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="resultado" *ngIf="resultado_busqueda">
+                  <div class="contenido_resultado" >
+                    <div
+                      class="productos_buscados_noencontrado"
+                      *ngIf="productosfiltrado.length === 0"
+                    >
+                      <p style="text-align: center; padding: 20px">
+                        Customer not Found.
+                      </p>
+                    </div>
+                    <div
+                      class="Customersahred"
+                      *ngFor="let item of productosfiltrado"
+                      style="cursor: pointer;"
+
+                    >
+                      <div class="row">
+
+                        <div class="col-12" (click)="SelectProdut(item)" >
+                          <p >
+                            {{ item.name }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <table class="table table-hover table-responseive-sm mt-3">
+                  <thead style="background:#1A3C74 ;color:white; text-align: center;">
+                    <td>No.</td>
+                    <td>Product</td>
+                    <td>PriceUnit</td>
+                    <td>Amount</td>
+                    <td>Total</td>
+                    <td></td>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of ProductListOrder; let i=index">
+                      <td>{{i+1}}</td>
+                      <td>{{item.name}}</td>
+                      <td>{{item.UnitSalePreci | currency}}</td>
+                      <td>{{item.Quantity}}</td>
+                      <td>{{item.subtotal | currency}}</td>
+                      <td><i class="fa-regular fa-trash-can text-danger" (click)="deleteproduct(i)"></i></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+            <div >
+              <h4 style="float: left;"> <b> Total: </b>{{total | currency}}</h4>
+            </div>
+              <input
+              type="submit"
+              *ngIf="titulo === 'New Order'"
+              class="btn btn-primary float-left"
+              value="Save Order"
+              (click)="save()"
+            />
+            <input
+              type="submit"
+              *ngIf="titulo === 'Edit Order'"
+              class="btn btn-warning "
+              value="Update Order"
+            />
+        </div>
+    </div>
+  </div>
+</div>

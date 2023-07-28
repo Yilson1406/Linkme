@@ -1,0 +1,185 @@
+<div class="container mt-3">
+  <div class="titulo my-5">
+    <h2 class="text-center">Customers</h2>
+    <div class="newproduct">
+      <button
+        data-bs-toggle="modal"
+        data-bs-target="#staticBackdrop"
+        (click)="modal('New Customer')"
+      >
+        <i class="fa-solid fa-plus me-2"></i>New Customer
+      </button>
+    </div>
+  </div>
+  <div class="content">
+    <div class="table-responsive-sm">
+      <table class="table table-hover">
+        <thead>
+          <td>No.</td>
+          <td>First Name</td>
+          <td>Last Name</td>
+          <td>Phone</td>
+          <td>Street</td>
+          <td>Zip Code</td>
+          <td></td>
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let item of Customer; let i = index">
+            <td>{{i +1}}</td>
+            <td>{{item.firstname}}</td>
+            <td>{{item.lastname}}</td>
+            <td>{{item.phone}}</td>
+            <td>{{item.street}}</td>
+            <td>{{item.zipCode}}</td>
+            <td>
+              <i
+                class="fa-regular fa-pen-to-square text-success"
+                data-bs-toggle="modal"
+                data-bs-target="#staticBackdrop"
+                title="Edit"
+                (click)="modal('Edit Customer', item)"
+              ></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="staticBackdrop"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">{{ titulo }}</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          #closebutton
+        ></button>
+      </div>
+      <form [formGroup]="form" (ngSubmit)="guardar()">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-12 col-md-6 my-3">
+              <label for="firstname" class="form-label">First Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="firstname"
+                placeholder="First Name"
+                formControlName="firstname"
+              />
+              <span
+                class="text-danger"
+                *ngIf=" form.controls['firstname'].invalid &&
+              (form.controls['firstname'].dirty || form.controls['firstname'].touched)
+              &&form.get('firstname')?.errors?.['required']"
+              >
+                Este campo es requerido *
+              </span>
+            </div>
+            <div class="col-12 col-md-6 my-3">
+              <label for="lastname" class="form-label">Last Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="lastname"
+                placeholder="Last Name"
+                formControlName="lastname"
+              />
+              <span
+                class="text-danger"
+                *ngIf="
+              form.controls['lastname'].invalid &&
+              (form.controls['lastname'].dirty || form.controls['lastname'].touched) &&
+              form.get('lastname')?.errors?.['required']"
+              >
+                Este campo es requerido *
+              </span>
+            </div>
+            <div class="col-12 col-md-6 my-3">
+              <label for="phone" class="form-label">Phone</label>
+              <input
+                type="text"
+                class="form-control"
+                id="phone"
+                placeholder="0999999999"
+                formControlName="phone"
+              />
+              <span
+                class="text-danger"
+                *ngIf="form.controls['phone'].invalid &&
+              (form.controls['phone'].dirty || form.controls['phone'].touched) &&
+              form.get('phone')?.errors?.['required']"
+              >
+                Este campo es requerido *
+              </span>
+            </div>
+            <div class="col-12 col-md-6 my-3">
+              <label for="zipcode" class="form-label">Zip Code</label>
+              <input
+                type="text"
+                class="form-control"
+                id="zipcode"
+                placeholder="071406"
+                formControlName="zipcode"
+              />
+              <span
+                class="text-danger"
+                *ngIf="form.controls['zipcode'].invalid &&
+              (form.controls['zipcode'].dirty || form.controls['zipcode'].touched) &&
+              form.get('zipcode')?.errors?.['required']"
+              >
+                Este campo es requerido *
+              </span>
+            </div>
+            <div class="col-12 my-3">
+              <label for="UnitListPrice" class="form-label">Street</label>
+              <textarea
+                id="UnitListPrice"
+                class="form-control"
+                placeholder="Av. Republica del Salvador y Eloy Alfaro"
+                rows="3"
+                formControlName="street"
+              ></textarea>
+              <span
+                class="text-danger"
+                *ngIf="form.controls['street'].invalid &&
+              (form.controls['street'].dirty || form.controls['street'].touched) &&
+              form.get('street')?.errors?.['required']"
+              >
+                Este campo es requerido *
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <input
+            type="submit"
+            *ngIf="titulo === 'New Customer'"
+            class="btn btn-primary"
+            value="Save Customer"
+          />
+          <input
+            type="submit"
+            *ngIf="titulo === 'Edit Customer'"
+            class="btn btn-warning"
+            value="Update Customer"
+          />
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
